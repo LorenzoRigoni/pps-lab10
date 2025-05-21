@@ -1,16 +1,51 @@
 Ex 1.3: search_two(Elem, List)
 
 search_two(X, cons(X, cons(_, cons(X, _)))).
-search_two(X, cons(_, Xs)) :- search_two(X, Xs).
+search_two(X, cons(_, T)) :- search_two(X, T).
 
 ----------------------------------------------------------------
 
 Ex 1.4: search_anytwo(Elem, List)
 
 search (X , cons (X , _)).
-search (X , cons (_ , Xs )) :- search (X , Xs ).
+search (X , cons (_ , T)) :- search (X , T).
 
-search_anytwo(X, cons(X, Xs)) :- search(X, Xs).
-search_anytwo(X, cons(_, Xs)) :- search_anytwo(X, Xs).
+search_anytwo(X, cons(X, T)) :- search(X, T).
+search_anytwo(X, cons(_, T)) :- search_anytwo(X, T).
+
+----------------------------------------------------------------
+
+Ex 2.1: size(List, Size)
+
+size(nil, zero).
+size(cons(_, T), s(X)) :- size(T, X).
+
+----------------------------------------------------------------
+
+Ex 2.2: sum_list(List, Sum)
+
+add(zero, Y, Y).
+add(s(X), Y, s(Z)) :- add(X, Y, Z).
+
+sum_list(nil, zero).
+sum_list(cons(H, T), R) :- sum_list(T, P), add(H, P, R).
+
+----------------------------------------------------------------
+
+Ex 2.4: max(List, Max)
+
+greater_or_equal(s(_), zero).
+greater_or_equal(s(X), s(Y)) :- greater_or_equal(X, Y).
+greater_or_equal(zero, zero).
+
+max(nil, Max, Max).
+max(cons(H, T), TempMax, Max) :-
+		max(T, H, Max),
+    greater_or_equal(H, TempMax).
+max(cons(H, T), TempMax, Max) :-
+		max(T, TempMax, Max),
+    greater_or_equal(TempMax, H).
+
+max(cons(H, T), Max) :- max(T, H, Max).
 
 ----------------------------------------------------------------
