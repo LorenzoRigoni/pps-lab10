@@ -49,3 +49,52 @@ max(cons(H, T), TempMax, Max) :-
 max(cons(H, T), Max) :- max(T, H, Max).
 
 ----------------------------------------------------------------
+
+Ex 3.1: same(List1, List2)
+
+same(nil, nil).
+same(cons(H, T1), cons(H, T2)) :- same(T1, T2).
+
+----------------------------------------------------------------
+
+Ex 3.2: all_bigger(List1, List2)
+
+greater(s(_), zero).
+greater(s(X), s(Y)) :- greater(X, Y).
+
+all_bigger(nil, nil).
+all_bigger(cons(H1, T1), cons(H2, T2)) :-
+	all_bigger(T1, T2),
+	greater(H1, H2).
+
+----------------------------------------------------------------
+
+Ex 3.3: sublist(List1, List2)
+
+sublist(nil, L2).
+sublist(cons(H, T), L2) :-
+	sublist(T, L2),
+	search(H, L2).
+
+----------------------------------------------------------------
+
+Ex 4.2: seqR(N, List)
+
+seqR(zero, cons(zero, nil)).
+seqR(s(H), cons(s(H), T)) :- seqR(H, T).
+
+----------------------------------------------------------------
+
+Ex 4.3: seqR2
+
+last(nil, X, cons(X, nil)).
+last(cons(H1, T1), X, cons(H2, T2)) :- last(T1, X, T2).
+
+seqR2(zero, nil).
+seqR2(s(N), R) :-
+	seqR2(N, T),
+	last(T, N, R).
+
+----------------------------------------------------------------
+
+
