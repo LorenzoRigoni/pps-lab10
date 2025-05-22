@@ -7,8 +7,8 @@ search_two(X, cons(_, T)) :- search_two(X, T).
 
 Ex 1.4: search_anytwo(Elem, List)
 
-search (X , cons (X , _)).
-search (X , cons (_ , T)) :- search (X , T).
+search(X, cons(X, _)).
+search(X, cons(_, T)) :- search (X, T).
 
 search_anytwo(X, cons(X, T)) :- search(X, T).
 search_anytwo(X, cons(_, T)) :- search_anytwo(X, T).
@@ -97,4 +97,113 @@ seqR2(s(N), R) :-
 
 ----------------------------------------------------------------
 
+Ex 5.1: map(_ + 1)
+% Map every Peano number of the list in s(N).
+% Input => map_1(cons(zero, cons(s(zero), cons(s(s(zero)), nil))), X). ([1, 2, 3])
 
+map_1(nil, nil).
+map_1(cons(H, T), cons(s(H), R)) :- map_1(T, R).
+
+----------------------------------------------------------------
+
+Ex 5.2: filter(_ > 0)
+% Create a new list without "zero" Peano numbers.
+% Input => filter_0(cons(s(zero), cons(zero, cons(s(s(zero)), nil))), X).
+
+filter_0(nil,nil).
+filter_0(cons(H, T),cons(H, R)):-
+	H \= zero,
+	filter_0(T, R).
+filter_0(cons(zero, T), R) :-
+	filter_0(T, R).
+
+----------------------------------------------------------------
+
+Ex 5.3: count(_ > 0)
+% Count the element of the list greater than 0.
+% Input => count_0(cons(s(zero), cons(zero, cons(s(s(zero)), nil))), N).
+
+count(L, N) :-
+	count(L, zero, N).
+count(nil, N, N).
+count(cons(_, T), A, N) :- count(T, s(A), N).
+
+count_0(L, N) :-
+	filter_0(L, R),
+	count(R, N).
+
+----------------------------------------------------------------
+
+Ex 5.4: find(_ > 0)
+% Find the first element of the list with elements greater than 0.
+% Input => find_0(X, cons(zero, cons(s(zero), cons(s(s(zero)), nil)))).
+
+find_0(N, L) :-
+	filter_0(L, R),
+	search(N, R).
+
+----------------------------------------------------------------
+
+Ex 5.5: take(N, List, Res)
+% Take the first N elements from the list.
+
+take(zero, _, nil).
+take(_, nil, nil).
+take(s(N), cons(H, T), cons(H, R)) :- take(N, T, R).
+
+----------------------------------------------------------------
+
+Ex 5.6: drop(N, List, Res)
+% Drop N elements of the list from the left.
+
+drop(zero, L, L).
+drop(_, nil, nil).
+drop(s(N), cons(_, T), R) :- drop(N, T, R).
+
+----------------------------------------------------------------
+
+Ex 5.7: reversed(List, Res)
+% Reverse the list
+
+reversed(L, R) :- reversed(L, nil, R).
+reversed(nil, A, A).
+reversed(cons(H, T), A, R) :- reversed(T, cons(H, A), R).
+
+----------------------------------------------------------------
+
+Ex 5.8: zip(List1, List2, Res)
+% Zip the elements of two lists.
+% Input => zip(cons(1, cons(2, nil)), cons(a, cons(b, nil)), R).
+
+zip(nil, _, nil).
+zip(_, nil, nil).
+zip(cons(H1, T1), cons(H2, T2), cons(pair(H1, H2), R)) :- zip(T1, T2, R).
+
+----------------------------------------------------------------
+
+Ex 5.9: dropWhile(List, Res)
+
+% Drop all the element not equal to zero until finds the first zero (if it exists).
+% Inputs: => dropWhile(cons(s(zero), cons(s(s(zero)), cons(zero, cons(s(zero), nil)))), R).
+	     dropWhile(cons(s(zero), cons(s(zero), nil)), R). (All elements dropped)
+	     dropWhile(cons(zero, cons(s(zero), cons(zero, nil))), R). (No element dropped)
+
+dropWhile(nil, nil).
+dropWhile(cons(zero, T), cons(zero, T)).
+dropWhile(cons(H, T), R) :-
+	H \= zero,
+	dropWhile(T, R).
+
+----------------------------------------------------------------
+
+Ex 5.10: dropRight(N, List, Res)
+% Drop N elements from the right of the list.
+% Inputs => dropRight(s(s(zero)), cons(a, cons(b, cons(c, cons(d, nil)))), R).
+	    dropRight(s(s(s(s(zero)))), cons(a, cons(b, cons(c, cons(d, nil)))), R).
+
+sub(N, zero, N).
+sub(s(N), s(M), R) :- sub(N, M, R).
+dropRight(N, L, R) :-
+	size(L, S),
+	sub(S, N, NTake),
+	take(NTake, L, R).
